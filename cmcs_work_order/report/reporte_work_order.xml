@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paper_work_order" model="report.paperformat" >
+        <field name="name">Formato de orden de trabajo</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_height">120</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <data>
+        <!--#########################################################################################-->
+        
+        <template id="report_work_order_document">
+            <t>
+                <head>
+                    
+                    <style>
+                        header{
+                            padding-top: 2px
+                        }
+
+                        table, th, td {
+                            border: none;
+                        }
+                        #detalle {
+                            font-size: 10px;
+                            height: 30px;
+                        }
+                        hr.barra{
+                            border-top: 1px solid black;
+                        }
+                        th{
+                            text-align: left;
+                        }
+                        
+                        
+
+                    </style>
+
+                </head>
+                <t t-set="o" t-value="o.with_context(lang=o.user_id.partner_id.lang)"/>
+                <div class="page">
+
+                    <header>
+                        <!-- <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 30px;" alt="Logo" /> -->
+                        <h3 t-if="o.company_id.name" t-field="o.company_id.name" ></h3>
+                    </header>
+
+                    <body>
+                        <table style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th width="200" ></th>
+                                    <th width="200" ></th>
+                                    <th width="200" ></th>
+                                    <th width="200" ></th>
+                                    <th width="200" ></th>
+                                    <th width="200" ></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="4"  ><h3>ORDEN DE TRABAJO</h3></th>
+                                    <th align="left"><h3>Nro</h3></th>
+                                    <th  ><h3 t-field='o.id'/></th>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="6" >
+                                        <hr class="barra"/>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td colspan="6" id="detalle">
+                                        DATOS GENERALES
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <div t-if="o.date">
+                                        <th><b>FECHA:</b></th>
+                                        <td  > <span t-field="o.date"/> </td>
+                                    </div>
+
+                                    <div t-if="o.user_id">
+                                        <th><b>APROBADO POR:</b></th>
+                                        <td  > <span t-field="o.user_id"/> </td>
+                                    </div>
+
+                                    <div t-if="o.requested_by">
+                                        <th><b>SOLICITANTE:</b></th>
+                                        <td  > <span t-field="o.requested_by"/> </td>
+                                    </div>
+                                    
+                                </tr>
+
+                                <tr>
+                                    
+
+                                    <div t-if="o.product_id">
+                                        <th><b>PRODUCTO:</b></th>
+                                        <td colspan="3"  > <span t-field="o.product_id.name"/> </td>
+                                        <th><b>CODIGO:</b></th>
+                                        <td  > <span t-field="o.product_id.default_code"/> </td>
+                                    </div>
+                                </tr>
+
+                                <tr>
+                                    <div t-if="o.apartment">
+                                        <th><b>DPTO/AREA:</b></th>
+                                        <td  > <span t-field="o.apartment"/> </td>
+                                    </div>
+                                    
+                                    <div t-if="o.client_id">
+                                        <th><b>CLIENTE:</b></th>
+                                        <td  > <span t-field="o.client_id"/> </td>
+                                    </div>
+
+                                    <div t-if="o.material">
+                                        <th><b>TIPO MATERIAL:</b></th>
+                                        <td> <span t-field="o.material"/> </td>
+                                    </div>
+                                    
+                                </tr>
+
+                                <tr>
+                                
+                                <tr>
+                                    <td colspan="6">
+                                        <hr class="barra"/>
+                                    </td>
+                                </tr>
+
+                                    <td colspan="6" id="detalle">
+                                        DETALLES DEL PRODUCTO
+                                    </td>
+                                </tr>
+
+                                
+
+                                <tr>
+                                    <div t-if="o.amount">
+                                        <th><b>CANTIDAD:</b></th>
+                                        <td  > <span t-field="o.amount"/> </td>
+                                    </div>
+
+                                    <div t-if="o.approximate_weight">
+                                        <th><b>PESO APROX.:</b></th>
+                                        <td  > <span t-field="o.approximate_weight"/> </td>
+                                    </div>
+
+                                    <div t-if="o.colors">
+                                        <th><b>COLORES:</b></th>
+                                        <td  > <span t-field="o.colors"/> </td>
+                                    </div>
+                                    
+                                </tr>
+
+                                <tr>
+                                    <div t-if="o.type_of_cut">
+                                        <th><b>TIPO DE CORTE:</b></th>
+                                        <td  > <span t-field="o.type_of_cut"/> </td>
+                                    </div>
+
+                                    <div t-if="o.pecked">
+                                        <th><b>PICOTEADO:</b></th>
+                                        <td> <span t-field="o.pecked"/> </td>
+                                    </div>
+
+                                    <div t-if="o.logo">
+                                        <th><b>LOGOTIPO:</b></th>
+                                        <td> <span t-field="o.logo"/> </td>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div t-if="o.thickness">
+                                        <th><b>ESPESOR:</b></th>
+                                        <td  > <span t-field="o.thickness"/> </td>
+                                    </div>
+
+                                    <div t-if="o.sealed">
+                                        <th><b>SELLADO:</b></th>
+                                        <td> <span t-field="o.sealed"/> </td>
+                                    </div>
+
+                                    <div t-if="o.printing_colors">
+                                        <th><b>COLOR DE IMP.:</b></th>
+                                        <td> <span t-field="o.printing_colors"/> </td>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div t-if="o.width">
+                                        <th><b>ANCHO:</b></th>
+                                        <td> <span t-field="o.width"/> </td>
+                                    </div>
+
+                                    <div t-if="o.height">
+                                        <th><b>LARGO:</b></th>
+                                        <td> <span t-field="o.height"/> </td>
+                                    </div>
+
+                                    <div t-if="o.plate_thickness">
+                                        <th><b>ESPESOR DE PLANCHA:</b></th>
+                                        <td> <span t-field="o.plate_thickness"/> </td>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div t-if="o.reduction">
+                                        <th><b>REDUCCION:</b></th>
+                                        <td> <span t-field="o.reduction"/> </td>
+                                    </div>
+
+                                    <div t-if="o.cylinder_roller">
+                                        <th><b>RODILLO/CILINDRO:</b></th>
+                                        <td> <span t-field="o.cylinder_roller"/> </td>
+                                    </div>
+
+                                    <div t-if="o.lines_print_repetitions">
+                                        <th><b>LINEAS/REPETICIONES:</b></th>
+                                        <td> <span t-field="o.lines_print_repetitions"/> </td>
+                                    </div>
+                                </tr>
+
+                                <tr>
+                                    <div t-if="o.printing_system">
+                                        <th><b>SISTEMA DE IMP.:</b></th>
+                                        <td> <span t-field="o.printing_system"/> </td>
+                                    </div>
+
+                                    <div t-if="o.number_of_labels">
+                                        <th><b>CANT. ETIQUETAS:</b></th>
+                                        <td> <span t-field="o.number_of_labels"/> </td>
+                                    </div>
+
+                                    <div t-if="o.waste">
+                                        <th><b>DESPERDICIO:</b></th>
+                                        <td> <span t-field="o.waste"/> </td>
+                                    </div>
+                                </tr>
+
+                                <tr>
+                                    <div t-if="o.development">
+                                        <th><b>DESARROLLO:</b></th>
+                                        <td> <span t-field="o.development"/> </td>
+                                    </div>
+
+                                    <div t-if="o.coil_dimension_sense">
+                                        <th><b>SENTIDO/DIMENCION:</b></th>
+                                        <td> <span t-field="o.coil_dimension_sense"/> </td>
+                                    </div>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                        <br/>
+                        <div t-if="o.description_bool == True">
+                            <hr class="barra" />
+                            <p id="detalle">DETALLES ADICIONALES</p>
+                            <div style="font-size: 13px">
+                                <p t-field='o.description'/>
+                            </div>
+                        </div>
+                    </body>
+                </div>
+            </t>
+        </template>
+
+        <!--#########################################################################################-->
+        
+        <template id="report_work_order">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cmcs_work_order.report_work_order_document" t-lang="o.user_id.partner_id.lang"/>
+
+                </t>
+            </t>
+        </template>
+        
+        <!--#########################################################################################-->
+        
+        <record id="action_report_work_order_document" model="ir.actions.report">
+            <field name="name">ORDEN DE TRABAJO</field>
+            <field name="model">work.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cmcs_work_order.report_work_order</field>
+            <field name="report_file">cmcs_work_order.report_work_order</field>
+            <field name="paperformat_id" ref="cmcs_work_order.paper_work_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!--#########################################################################################-->
+
+
+        <!-- ####################################################################################   -->
+    </data>
+</odoo>

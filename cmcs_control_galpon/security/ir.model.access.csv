@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_control_galpon,control galpon,model_control_galpon,base.group_user,1,1,1,0
+access_control_galpon_line,control galpon line,model_control_galpon_line,base.group_user,1,1,1,0

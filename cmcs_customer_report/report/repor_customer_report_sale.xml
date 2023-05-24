@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="repor_customer_report_sale" inherit_id="sale.report_saleorder_document">
+            
+            <xpath expr="//div[@class='page']" position="after">
+                <br/><br/><br/><br/><br/><br/>
+                
+                <table id="firm_table" class="condensed" style="text-aling:left; width:100%;">
+                    
+                    <tr>
+                        <td>
+                            <div>________________________</div>
+                        </td>
+                        <td style="text-aling:center;" >
+                            <div>Firma</div>
+                        </td>
+                        
+                    </tr>
+                </table>
+                
+            </xpath>
+            
+        </template>
+    </data>
+
+</odoo>

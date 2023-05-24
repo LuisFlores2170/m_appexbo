@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit_taxs" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.taxs</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//div[@name='default_taxes_setting_container']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="ids_taxes" title="These taxes are set in any new product created.">
+                    <div class="o_setting_left_pane"/>
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Taxes</span>
+                        <span class="fa fa-lg fa-building-o"
+                              title="Values set here are company-specific."
+                              aria-label="Values set here are company-specific."
+                              groups="base.group_multi_company"
+                              role="img"/>
+                        <div class="text-muted"> Default taxes applied to local transactions </div>
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label string="Sales Tax" for="sale_tax_ids" class="col-lg-3 o_light_label"/>
+                                <field name="sale_tax_ids"
+                                       widget="many2many_tags" domain="[('type_tax_use', 'in', ('sale', 'all')), ('company_id', '=', company_id)]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

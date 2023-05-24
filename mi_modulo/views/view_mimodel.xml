@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- VIEWS: "Human readable name"
+        
+            - Model·········: model
+            - Base Addons···: base    
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <!-- Form view for "model" -->
+        <record id="view_partner_form_appex" model="ir.ui.view">
+            <field name="name">res.partner.form.appex</field>
+            <field name="model">res.partner</field>
+             <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <field name='vat' position="after"  >
+                    <field name='analytic_account_id'/>
+                    <field name='account_analytic_ids' widget='many2many_tags'/>
+                    <field name='code_name'/>
+                    
+                </field>
+
+                
+            </field>
+        </record>
+
+    </data>
+</odoo>

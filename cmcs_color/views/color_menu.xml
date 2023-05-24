@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="color_list">
+            <field name="name">Colores</field>
+            <field name="res_model">color</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

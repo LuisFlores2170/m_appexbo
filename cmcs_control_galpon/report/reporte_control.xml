@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_galpon_document">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.user_id.partner_id.lang)"/>
+                <div class="page">
+                    <h2>
+                        <span t-if="o.kardex == 'PT'">kardex de producto terminado</span>
+                        <span t-if="o.kardex == 'MP'">kardex de consumo de materia prima</span>
+                    </h2>
+
+                    <div id="informations" class="row mt-4 mb-4">
+
+
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <strong>Galpon:</strong>
+                            <p class="m-0" t-field="o.galpon_id"/>
+                        </div>
+
+                        <div class="col-auto col-3 mw-100 mb-2" >
+                            <strong>Description:</strong>
+                            <p class="m-0" t-field="o.description"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <strong>Material:</strong>
+                            <p class="m-0" t-field="o.material_id"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <strong>Due Date:</strong>
+                            <p class="m-0" t-field="o.periodo"/>
+                        </div>
+
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <strong>User:</strong>
+                            <p class="m-0" t-field="o.user_id"/>
+                        </div>
+
+                    </div>
+
+                    <table class="table table-sm o_main_table" name="galpon_class_table">
+                        <thead>
+                            <tr>
+                                <th class="text-left"><span>Date</span></th>
+                                <th class="text-right"><span>Doc. interno</span></th>
+                                <th class="text-right"><span>Description</span></th>
+                                <th class="text-right"><span>Type of material</span></th>
+                                <th class="text-right"><span>U.M.</span></th>
+                                <th class="text-right"><span>Cant. Units</span></th>
+                                <th class="text-right"><span>Input in kg</span></th>
+                                <th class="text-right"><span>Output in kg</span></th>
+                                <th class="text-right"><span>Output to central</span></th>
+                                <th class="text-right"><span>Saldo</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="lines" t-value="o.consume_lines_ids"/>
+                            <t t-foreach="lines" t-as="line">
+                                <tr>
+                                    <td><span t-field="line.date"/></td>
+                                    <td><span t-field="line.internal_document"/></td>
+                                    <td><span t-field="line.details"/></td>
+                                    <td><span t-field="line.type_of_material"/></td>
+                                    <td><span t-field="line.udm_id"/></td>
+                                    <td><span t-field="line.qty_unidades"/></td>
+                                    <td><span t-field="line.imput_in_kilogram"/></td>
+                                    <td><span t-field="line.output_in_kilogram"/></td>
+                                    <td><span t-field="line.output_central"/></td>
+                                    <td><span t-field="line.saldo"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+        <template id="report_galpon">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cmcs_control_galpon.report_galpon_document" t-lang="o.user_id.partner_id.lang"/>
+
+                </t>
+            </t>
+        </template>
+        <record id="action_report_galpon_document" model="ir.actions.report">
+            <field name="name">reporte</field>
+            <field name="model">control.galpon</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cmcs_control_galpon.report_galpon</field>
+            <field name="report_file">cmcs_control_galpon.report_galpon</field>
+            <field name="binding_model_id" ref="model_control_galpon"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

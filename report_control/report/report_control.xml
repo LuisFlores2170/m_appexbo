@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="control_reporte">
+        <t t-set="edi_values" t-value="get_values()" />
+        
+        <span t-esc="edi_values.get('registro')"/>
+
+    </template>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="form_sale_order" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+             <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="client_code"/>
+                </xpath>
+
+                
+                <xpath expr="//group[@name='order_details']" position="after">
+                    <group string="Aplicar referencia de cliente" >
+                        <field name="customer_reference_ids" widget="many2many_tags"  />
+                        
+                        <button name="updatedomain"
+                                string="Aplicar referencias"
+                                type="object"
+                                help="Aplicar referencia de clientes"/>
+                        
+                    </group>
+                </xpath>
+                
+            </field>
+        </record>
+    </data>
+</odoo>

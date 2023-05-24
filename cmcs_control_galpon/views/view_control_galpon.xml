@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    
+    <!-- VIEWS: "Human readable name"
+    
+        - Model·········: model
+        - _rec_name·····: name
+        - Domain········: []
+        - Context·······: \{}
+        - Parent menu ··: base.menu_custom
+        - View priority·: 16    
+        - Sequence····..: 10
+        - Action help···: Something about model
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Tree view for "model" -->
+    <record id="view_control_galpon_tree" model="ir.ui.view">
+        <field name="name">view.control.galpon.tree</field>
+        <field name="model">control.galpon</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="model_tree" create="true" delete="true" edit="true">
+                <field name="periodo" />
+                <field name="kardex" />
+                <field name="material_id" />
+                <field name="user_id" />
+                               
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Form view for "model" -->
+    <record id="view_control_galpon_form" model="ir.ui.view">
+        <field name="name">view.control.galpon.form</field>
+        <field name="model">control.galpon</field>
+        <field name="type">form</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <form string="model_form" create="true" delete="true" edit="true">
+                <header>
+                    <button name="action_draft" string="Reset to Draft" type="object" attrs="{'invisible' : [('state', 'in', ['draft','done'])]}" />
+                    <button name="action_done" string="Set to done" type="object" attrs="{'invisible' : [('state', 'in', ['done','cancel'])]}" />
+                    <button name="action_cancel" string="Set to cancel" type="object" attrs="{'invisible' : [('state', 'in', ['cancel'])]}" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group>
+                            <field name="kardex" />
+                            <field name="material_id" />
+                            <field name="periodo" />
+                        </group>
+                        <group>
+                            <field name="galpon_id"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+
+                    <notebook>
+                            <page id="consume_tab"
+                                  string="consume Lines">
+                                <field name="consume_lines_ids"
+                                       widget="section_and_note_one2many"
+                                       mode="tree,kanban">
+                                
+                                    <tree editable="bottom" string="Consume line">
+                                        <field name="date"/>
+                                        <field name="internal_document"/>
+                                        <field name="details"/>
+                                        <field name="type_of_material"/>
+                                        <field name="udm_id"/>
+                                        <field name="qty_unidades"/>
+                                        <field name="imput_in_kilogram"/>
+                                        <field name="output_in_kilogram"/>
+                                        <field name="output_central"/>
+                                        <field name="saldo"/>
+                                        
+                                    </tree>
+                                </field>
+                                
+                            </page>
+                    </notebook>
+
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Search view for "model" -->
+    <record id="view_control_galpon_search" model="ir.ui.view">
+        <field name="name">view.control.galpon.search</field>
+        <field name="model">control.galpon</field>
+        <field name="type">search</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <search string="model_search">
+                <field name="kardex"/>
+                <field name="material_id"/>
+                <field name="description"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Main window action for "model" 
+    <record id="action_control_galpon_act_window" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Control de galpon</field>
+        <field name="res_model">control.galpon</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+        <field name="target">current</field>
+        <field name="domain">[]</field>
+        <field name="context">\{}</field>
+        <field name="search_view_id" ref="view_control_galpon_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Controla el movimiento de los galpones
+            </p>
+        </field>
+    </record>
+    -->
+
+    <record id="action_control_galpon_act_window" model="ir.actions.act_window">
+        <field name="context"></field>
+        <field name="name">Control de galpon</field>
+        <field name="res_model">control.galpon</field>
+        <field name="domain"></field>
+        <field name="view_id" ref="view_control_galpon_tree"/>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_control_galpon_search" />
+    </record>
+
+
+    <menuitem name="Control"
+        id="control_menu"
+        groups="base.group_user"
+        web_icon="cmcs_control_galpon,static/description/icon.png"
+        sequence="55">
+        <menuitem id="control_galpon_menu" name="Control" action="action_control_galpon_act_window" groups="base.group_user" sequence="1"/>
+    </menuitem>
+    
+
+</odoo>

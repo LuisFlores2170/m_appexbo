@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_contact" model="ir.ui.view">
+            <field name="name">res.partner.contact.defaultcode</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            
+            <field name="arch" type="xml">
+                <xpath expr="//span[@name='address_name']" position="before">
+                    <field name="default_code" string="Codigo" placeholder="Cod. de referencia"/>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
