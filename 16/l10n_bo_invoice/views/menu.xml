@@ -208,4 +208,24 @@
                 action="view_l10n_bo_type_unit_measurement"
                 sequence="18"
             />
+
+            
+            
+
+            
+        
+        <menuitem
+            id="l10n_bo_invoice_settings_menu_root"
+            name="Configuracion"
+            parent='l10n_bo_invoice_root'
+            sequence="3"/>
+
+            <menuitem 
+                id="l10n_bo_invoice_settings_menu"
+                name="Ajustes"
+                parent="l10n_bo_invoice_settings_menu_root"
+                action="l10n_bo_invoice.l10n_bo_invoice_settings"
+                sequence="1"
+            />
+      
 </odoo>

@@ -2,6 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_l10n_bo_branch_office,access.l10n.bo.branch.office,model_l10n_bo_branch_office,,1,1,1,1
 access_l10n_bo_pos,access.l10n.bo.pos,model_l10n_bo_pos,,1,1,1,1
 access_l10n_bo_cuis,access.l10n.bo.cuis,model_l10n_bo_cuis,,1,1,1,1
+access_l10n_bo_cufd,access.l10n.bo.cufd,model_l10n_bo_cufd,,1,1,1,1
 access_l10n_bo_edi_certificate,access.l10n.bo.edi.certificate,model_l10n_bo_edi_certificate,,1,1,1,1
 access_message_code,access.message.code,model_message_code,,1,1,1,1
 

@@ -28,6 +28,10 @@
             <form>
                 <header>
                     <button name="cuis_request" type="object" string="Solicitar cuis" icon="fa-play-circle" />
+                    <button name="cufd_request" type="object" string="Solicitar cufd" icon="fa-play-circle" />
+                    <button name="test_siat_connection" type="object" string="Verificar conexión con siat" icon="fa-play-circle" />
+                    <button name="open_pos_request" type="object" string="Abrir en siat" icon="fa-play-circle" />
+                    
                 </header>
                 <sheet>
                     <h1>
@@ -36,14 +40,17 @@
                     <group>
                         <group>  
                             <field name="branch_office_id"/>
+                            <field name="emision_id"/>
+                            
                         </group>
                         <group>
                             <field name="cuis_id"/>
+                            <field name="cufd_id"/>
                         </group>
                     </group>
                     <group>    
                         <group>
-                            <field name="cufd"/>
+                            <field name="address"/>
                         </group>
                     </group>
                     
