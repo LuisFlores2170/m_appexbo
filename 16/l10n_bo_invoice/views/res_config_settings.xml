@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_l10n_bo_invoice" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.l10n.bo.invoice.edi</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Configuracion de servicios" string="Servicios"
+                     data-key="l10n_bo_invoice"
+                     groups="l10n_bo_invoice.group_adm_invoice_edi">
+                    <h2>Configuracion</h2>
+                    <div class="row mt16 o_settings_container" id="service_request_configuration">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane border-start-0">
+                                <div class="content-group">
+                                    <div class="row mt8">
+                                    
+                                        <div>
+                                            <label class="col-lg-3" string="Entorno" for="l10n_bo_code_environment"/>
+                                            <field name="l10n_bo_code_environment"/>
+                                        </div>
+                                        <div>
+                                            <label class="col-lg-3" string="Modalidad" for="l10n_bo_code_modality"/>
+                                            <field name="l10n_bo_code_modality"/>    
+                                        </div>
+                                        <div>
+                                            <label class="col-lg-3" string="Codigo de sistema" for="l10n_bo_code_system"/>
+                                            <field name="l10n_bo_code_system"/>    
+                                        </div>
+                                        <div>
+                                            <label class="col-lg-3" string="Token" for="l10n_bo_delegate_token"/>
+                                            <field name="l10n_bo_delegate_token"/>    
+                                        </div>
+                                        <div>
+                                            <label class="col-lg-3" string="Certificado (BO)" for="l10n_bo_edi_certificate_id" attrs="{'invisible':  [('l10n_bo_code_modality','!=','1')]}"/>
+                                            <field name="l10n_bo_edi_certificate_id" attrs="{'invisible':  [('l10n_bo_code_modality','!=','1')]}"/>    
+                                        </div>
+                                        <div>
+                                            <label class="col-lg-3" string="Codigo Cafc" for="cafc"/>
+                                            <field name="cafc" />    
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Catalogos para sincronizar</h2>
+                    <div class="row mt16 o_settings_container" id="endpoints_configuration">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane border-start-0">
+                                <div class="content-group">
+                                    <div class="row mt8">
+                                        <label class="col-lg-3" string="Catalogos" for="l10n_bo_catalog_sync_ids"/>
+                                        <field name="l10n_bo_catalog_sync_ids" widget="many2many_tags"/>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="l10n_bo_invoice_settings" model="ir.actions.act_window">
+        <field name="name">Ajustes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form_l10n_bo_invoice"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'l10n_bo_invoice'}</field>
+    </record>
+
+    
+    <record id="view_l10n_bo_edi_certificate_form" model="ir.ui.view">
+        <field name="name">l10n.bo.edi.certificate.form</field>
+        <field name="model">l10n.bo.edi.certificate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>    
+                        <group>
+                            <field name="content"/>
+                            <field name="password"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>       
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+</odoo>

@@ -46,7 +46,8 @@
                                 <tree editable="bottom">
                                     <field name="code"/>
                                     <field name="name"/>
-                                    <field name="cuis" readonly="1" />
+                                    <field name="cuis_id" readonly="1" />
+                                    <button name="cuis_request" type="object" string="Solicitar cuis" icon="fa-play-circle" />
                                 </tree>
                             </field>
                         </page>

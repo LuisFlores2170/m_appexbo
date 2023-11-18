@@ -27,6 +27,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="cuis_request" type="object" string="Solicitar cuis" icon="fa-play-circle" />
                 </header>
                 <sheet>
                     <h1>
@@ -37,7 +38,7 @@
                             <field name="branch_office_id"/>
                         </group>
                         <group>
-                            <field name="cuis"/>
+                            <field name="cuis_id"/>
                         </group>
                     </group>
                     <group>    

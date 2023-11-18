@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 class L10nBoBranchOffice(models.Model):
     _name = 'l10n.bo.branch.office'
-    _description = 'CUIS Request'
+    _description = 'Sucursales'
 
     
     name = fields.Char(
@@ -27,10 +27,19 @@ class L10nBoBranchOffice(models.Model):
     
     code = fields.Integer(
         string='Código',
+        required=True,
         copy=False
     )
-    address = fields.Text(string='Dirección',)
-    l10n_bo_pos_ids = fields.One2many(string='Puntos de venta',comodel_name='l10n.bo.pos',inverse_name='branch_office_id')
+    address = fields.Text(
+        string='Dirección',
+        copy=False
+    )
+    l10n_bo_pos_ids = fields.One2many(
+        string='Puntos de venta',
+        comodel_name='l10n.bo.pos',
+        inverse_name='branch_office_id', 
+        copy=False
+    )
     
     def getCode(self):
         return self.code

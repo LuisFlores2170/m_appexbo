@@ -28,7 +28,7 @@
     'external_dependencies': {'python': ['signxml', 'qrcode']},
     'data': [
         #DATA
-        #'data/l10n_bo_catalog.xml',
+        'data/l10n_bo_catalog.xml',
         #'data/mail_templates.xml',
         #'data/res.country.state.csv',
         #'data/res.city.csv',
@@ -53,8 +53,8 @@
         #VIEWS
         'views/l10n_bo_branch_office.xml',
         'views/l10n_bo_pos.xml',
-        #'views/res_config_settings.xml',
-        #'views/l10n_bo_catalogs.xml',
+        'views/res_config_settings.xml',
+        'views/l10n_bo_catalog.xml',
         #'views/l10n_bo_product.xml',
         #'views/account_move.xml',
         #'views/res_partner.xml',

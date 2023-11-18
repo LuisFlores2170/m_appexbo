@@ -38,24 +38,19 @@ class L10nBoPos(models.Model):
 
     def getCode(self):
         return self.code
-    
-    
-    cuis = fields.Char(
-        string='Cuis',
-        copy=False
-    )
 
     
     cuis_id = fields.Many2one(
         string='Cuis',
-        comodel_name='l10.bo.cuis',
+        comodel_name='l10n.bo.cuis',
+        readonly=True, 
         copy=False
     )
     
 
     def getCuis(self):
-        if self.cuis:
-            return self.cuis
+        if self.cuis_id:
+            return self.cuis_id.getCode()
         raise UserError('El punto de venta seleccionado no tiene un cuis valido')
     
     
@@ -71,14 +66,14 @@ class L10nBoPos(models.Model):
     
 
     # CUIS METHODS
-    def button_process_siat(self):
+    def cuis_request(self):
         self.ensure_one()
         _today_now = datetime.now()
         _update = False
-        if not self.effective_date:
+        if not self.cuis_id:
             _update = True
-        if self.effective_date:
-            if _today_now >= self.effective_date:
+        if self.cuis_id:
+            if _today_now >= self.cuis_id.fechaVigencia:
                 _update = True
         if _update:
             self.process_siat('cuis')
@@ -92,30 +87,120 @@ class L10nBoPos(models.Model):
     def _prepare_params_soap_cuis(self):
         return {'SolicitudCuis': self.get_default_params()}
     
+    
+    
     def get_default_params(self):
         return {
-            'codigoAmbiente': int(self.branch_office_id.company_id.l10n_bo_code_environment),
-            'codigoModalidad': int(self.branch_office_id.company_id.l10n_bo_code_modality),
+            'codigoAmbiente': int(self.branch_office_id.company_id.getL10nBoCodeEnvironment()),
+            'codigoModalidad': int(self.branch_office_id.company_id.getL10nBoCodeModality()),
             'codigoPuntoVenta': int(self.code),
-            'codigoSistema': self.branch_office_id.company_id.l10n_bo_code_system,
-            'codigoSucursal': self.bo_branch_office_id.code,
-            'nit': self.branch_office_id.company_id.vat
+            'codigoSistema': self.branch_office_id.company_id.getL10nBoCodeSystem(),
+            'codigoSucursal': self.branch_office_id.getCode(),
+            'nit': self.branch_office_id.company_id.getNit()
         }
     
+    
+    error = fields.Char(
+        string='error',
+    )
+    
+    
+    def prepare_process_reponse_cuis(self, response):
+        
+        if response.get('success'):
+            res_data = response.get('data', {})
+            if res_data:
+                _vals = {
+                    'fechaVigencia' : res_data.fechaVigencia.strftime('%Y-%m-%d %H:%M:%S'),
+                    'codigo'        : res_data.codigo,
+                    'transaccion'    : res_data.transaccion
+                }
+                if self.cuis_id:
+                    self.cuis_id.write(_vals)
+                else:
+                    self.cuis_id = self.env['l10n.bo.cuis'].create(_vals)
+                
+                _logger.info(f'{res_data.mensajesList}')
+                self.cuis_id.setMessageList(res_data.mensajesList) if res_data.mensajesList else []
+
+        else:
+            self.write({'error':response.get('error')})
+    
+    def getDatetimeNow(self):
+        return fields.Datetime.now().astimezone(timezone(self.branch_office_id.company_id.partner_id.tz)).astimezone(pytz.UTC).replace(tzinfo=None)
 
 class l10nBoCuis(models.Model):
-    _name = "l10.bo.cuis"
+    _name = "l10n.bo.cuis"
     _description = "Cuis de Punto de venta"
+
 
     name = fields.Char(
         string='Cuis',
+        related='codigo',
+        readonly=True,
+        store=True
     )
+
     
-    effective_date = fields.Datetime(
-        string='Fecha efectiva',
+    codigo = fields.Char(
+        string='Codigo',
         copy=False,
         readonly=True 
     )
+    
+    
+    fechaVigencia = fields.Datetime(
+        string='Fecha vigencia',
+        copy=False,
+        readonly=True 
+    )
+
+    
+    messageList = fields.Many2many(
+        string='Lista de mensajes',
+        comodel_name='l10n.bo.message.service',
+        readonly=True ,
+        copy=False
+    )
+    
+    def setMessageList(self, _lists):
+        _message_ids = []
+        for _list in _lists:
+            _message_id = self.env['l10n.bo.message.service'].search(
+                [
+                    (
+                        'codigoClasificador','=', _list.codigo
+                    )
+                ],
+                limit=1
+            )
+            if _message_id:
+                _message_ids.append(_message_id.id)
+
+        self.write(
+            {
+                'messageList': [
+                    (
+                        6,0,_message_ids
+                    )
+                ]
+            }
+        )   
+    
+    
+    transaccion = fields.Boolean(
+        string='Transacción',
+        default=False,
+        copy=False,
+        readonly=True 
+    )
+    
+    
+
+    def getCode(self):
+        if self.codigo:
+            return self.codigo
+        raise UserError('No se encontro un CUIS valido')
 
     
 
