@@ -1,0 +1,113 @@
+"id","country_id:id","state_id:id","name","code"
+Oropeza,base.bo,Chuquisaca,Oropeza,0101
+Azurduy,base.bo,Chuquisaca,Azurduy,0102
+Zudañez,base.bo,Chuquisaca,Zudañez,0103
+Tomina,base.bo,Chuquisaca,Tomina,0104
+HernandoSiles,base.bo,Chuquisaca,Hernando Siles,0105
+Yamparaez,base.bo,Chuquisaca,Yamparaez,0106
+NorCinti,base.bo,Chuquisaca,Nor Cinti,0107
+BelisarioBoeto,base.bo,Chuquisaca,Belisario Boeto,0108
+SurCinti,base.bo,Chuquisaca,Sur Cinti,0109
+LuisCalvo,base.bo,Chuquisaca,Luis Calvo,0110
+Murillo,base.bo,LaPaz,Murillo,0201
+Omasuyos,base.bo,LaPaz,Omasuyos,0202
+Pacajes,base.bo,LaPaz,Pacajes,0203
+Camacho,base.bo,LaPaz,Camacho,0204
+Muñecas,base.bo,LaPaz,Muñecas,0205
+Larecaja,base.bo,LaPaz,Larecaja,0206
+FranzTamayo,base.bo,LaPaz,Franz Tamayo,0207
+Ingavi,base.bo,LaPaz,Ingavi,0208
+Loayza,base.bo,LaPaz,Loayza,0209
+Inquisivi,base.bo,LaPaz,Inquisivi,0210
+SudYungas,base.bo,LaPaz,Sud Yungas,0211
+LosAndes,base.bo,LaPaz,Los Andes,0212
+Aroma,base.bo,LaPaz,Aroma,0213
+NorYungas,base.bo,LaPaz,Nor Yungas,0214
+AbelIturralde,base.bo,LaPaz,Abel Iturralde,0215
+BautistaSaavedra,base.bo,LaPaz,Bautista Saavedra,0216
+MancoKapac,base.bo,LaPaz,Manco Kapac,0217
+GualbertoVillarroel,base.bo,LaPaz,Gualberto Villarroel,0218
+GeneralJoséManuel,base.bo,LaPaz,General José Manuel,0219
+Caranavi,base.bo,LaPaz,Caranavi,0220
+Cercado,base.bo,Cochabamba,Cercado,0301
+Campero,base.bo,Cochabamba,Campero,0302
+Ayopaya,base.bo,Cochabamba,Ayopaya,0303
+EstebanArce,base.bo,Cochabamba,Esteban Arce,0304
+Arani,base.bo,Cochabamba,Arani,0305
+Arque,base.bo,Cochabamba,Arque,0306
+Capinota,base.bo,Cochabamba,Capinota,0307
+GermánJordán,base.bo,Cochabamba,Germán Jordán,0308
+Quillacollo,base.bo,Cochabamba,Quillacollo,0309
+Chapare,base.bo,Cochabamba,Chapare,0310
+Tapacarí,base.bo,Cochabamba,Tapacarí,0311
+Carrasco,base.bo,Cochabamba,Carrasco,0312
+Mizque,base.bo,Cochabamba,Mizque,0313
+Punata,base.bo,Cochabamba,Punata,0314
+Bolivar,base.bo,Cochabamba,Bolivar,0315
+Tiraque,base.bo,Cochabamba,Tiraque,0316
+Cercado,base.bo,Oruro,Cercado,0401
+Abaroa,base.bo,Oruro,Abaroa,0402
+Carangas,base.bo,Oruro,Carangas,0403
+Sajama,base.bo,Oruro,Sajama,0404
+Litoral,base.bo,Oruro,Litoral,0405
+Poopó,base.bo,Oruro,Poopó,0406
+PantaleonDalence,base.bo,Oruro,Pantaleon Dalence,0407
+LadislaoCabrera,base.bo,Oruro,Ladislao Cabrera,0408
+Sabaya,base.bo,Oruro,Sabaya,0409
+Saucarí,base.bo,Oruro,Saucarí,0410
+TomásBarrón,base.bo,Oruro,Tomás Barrón,0411
+SurCarangas,base.bo,Oruro,Sur Carangas,0412
+SanPedroDeTotora,base.bo,Oruro,San Pedro De Totora,0413
+SebastianPagador,base.bo,Oruro,Sebastian Pagador,0414
+Mejillones,base.bo,Oruro,Mejillones,0415
+NorCarangas,base.bo,Oruro,Nor Carangas,0416
+TomásFrías,base.bo,Potosí,Tomás Frías,0501
+RafaelBustillo,base.bo,Potosí,Rafael Bustillo,0502
+CornelioSaavedra,base.bo,Potosí,Cornelio Saavedra,0503
+Chayanta,base.bo,Potosí,Chayanta,0504
+Charcas,base.bo,Potosí,Charcas,0505
+NorChichas,base.bo,Potosí,Nor Chichas,0506
+AlonsodeIbañez,base.bo,Potosí,Alonso de Ibañez,0507
+SurChichas,base.bo,Potosí,Sur Chichas,0508
+NorLipez,base.bo,Potosí,Nor Lipez,0509
+SurLipez,base.bo,Potosí,Sur Lipez,0510
+JoséMaríaLinares,base.bo,Potosí,José María Linares,0511
+AntonioQuijarro,base.bo,Potosí,Antonio Quijarro,0512
+GeneralBernardinoBilbao,base.bo,Potosí,General Bernardino Bilbao,0513
+DanielCampos,base.bo,Potosí,Daniel Campos,0514
+ModestoOmiste,base.bo,Potosí,Modesto Omiste,0515
+EnriqueBaldivieso,base.bo,Potosí,Enrique Baldivieso,0516
+Cercado,base.bo,Tarija,Cercado,0601
+Arce,base.bo,Tarija,Arce,0602
+GranChaco,base.bo,Tarija,Gran Chaco,0603
+Avilez,base.bo,Tarija,Avilez,0604
+Mendez,base.bo,Tarija,Mendez,0605
+BurnetO'Connor,base.bo,Tarija,Burnet O'Connor,0606
+AndresIbañez,base.bo,SantaCruz,Andres Ibañez,0701
+Warnes,base.bo,SantaCruz,Warnes,0702
+Velasco,base.bo,SantaCruz,Velasco,0703
+Ichilo,base.bo,SantaCruz,Ichilo,0704
+Chiquitos,base.bo,SantaCruz,Chiquitos,0705
+Sara,base.bo,SantaCruz,Sara,0706
+Cordillera,base.bo,SantaCruz,Cordillera,0707
+ValleGrande,base.bo,SantaCruz,Valle Grande,0708
+Florida,base.bo,SantaCruz,Florida,0709
+ObispoSantisteban,base.bo,SantaCruz,Obispo Santisteban,0710
+ÑufloDeChavez,base.bo,SantaCruz,Ñuflo De Chavez,0711
+AngelSandoval,base.bo,SantaCruz,Angel Sandoval,0712
+ManuelMaríaCaballero,base.bo,SantaCruz,Manuel María Caballero,0713
+GermanBusch,base.bo,SantaCruz,German Busch,0714
+Guarayos,base.bo,SantaCruz,Guarayos,0715
+Cercado,base.bo,Beni,Cercado,0801
+VacaDiez,base.bo,Beni,Vaca Diez,0802
+GeneralJoséBallivián,base.bo,Beni,General José Ballivián,0803
+Yacuma,base.bo,Beni,Yacuma,0804
+Moxos,base.bo,Beni,Moxos,0805
+Marbán,base.bo,Beni,Marbán,0806
+Mamoré,base.bo,Beni,Mamoré,0807
+Iténez,base.bo,Beni,Iténez,0808
+NicolásSuárez,base.bo,Pando,Nicolás Suárez,0901
+Manuripi,base.bo,Pando,Manuripi,0902
+MadreDeDios,base.bo,Pando,Madre De Dios,0903
+Abuná,base.bo,Pando,Abuná,0904
+FedericoRomán,base.bo,Pando,Federico Román,0905
