@@ -17,6 +17,12 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="code"/>
+                <field name="quant_online"/>
+                <field name="quant_offline"/>
+                <field name="quant_inactive" />
+                <field name="quant_pos"/>
+                
             </tree>
         </field>
     </record>
@@ -29,6 +35,7 @@
                 <header>
                     <button name="update_pos_from_siat" type="object" string="ACTUALIZAR POS(S)" icon="fa-play-circle" />
                     <button name="cuis_massive_request" type="object" string="ACTUALIZAR CUIS(S)" icon="fa-play-circle" />
+                    <button name="cufd_massive_request" type="object" string="ACTUALIZAR CUFD(S)" icon="fa-play-circle" />
                     
                 </header>
                 <sheet>
@@ -49,8 +56,13 @@
                                 <tree editable="bottom">
                                     <field name="code"/>
                                     <field name="name"/>
-                                    <field name="cuis_id" readonly="1" />
+                                    <field name="requested_cuis" widget="boolean_toggle"/>
+                                    <field name="emision_id" />
                                     <button name="cuis_request" type="object" string="Solicitar cuis" icon="fa-play-circle" />
+                                    <button name="cufd_request" type="object" string="Act. cufd" icon="fa-refresh" />
+                                    <button name="open_pos_request" type="object" string="Registrar POS" icon="fa-plus" />
+                                    <button name="delete_to_siat" type="object" string="Eliminar POS" confirm="¿Eliminar punto de venta de la base de datos del SIAT?" icon="fa-trash" />
+                                    
                                 </tree>
                             </field>
                         </page>

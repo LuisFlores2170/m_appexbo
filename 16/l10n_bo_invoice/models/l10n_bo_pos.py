@@ -3,6 +3,7 @@ from odoo import api, fields, models
 from odoo.addons.l10n_bo_invoice.tools.siat_soap_services import SiatSoapServices as SiatService
 from odoo.addons.l10n_bo_invoice.tools.constants import SiatSoapMethod as siatConstant
 from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 from datetime import datetime
 import logging
 from pytz import timezone
@@ -17,6 +18,20 @@ class L10nBoPos(models.Model):
         string='Nombre',
         compute='_compute_name'
     )
+
+    @api.model
+    def create(self, vals):
+        if self.search([('code','=',vals.get('code'))]):
+            raise ValidationError('No puede tener codigos de puntos de venta iguales')
+        res = super(L10nBoPos, self).create(vals)
+        return res
+    
+    
+    @api.onchange('code')
+    def _onchange_code(self):
+        if self.create_date and self.search([('code','=',self.code)]):
+            raise ValidationError('No puede tener codigos de puntos de venta iguales')
+    
     
     @api.depends('code')
     def _compute_name(self):
@@ -71,10 +86,11 @@ class L10nBoPos(models.Model):
     
     address = fields.Char(
         string='Dirección',
-        related='cufd_id.direccion',
-        readonly=False,
-        store=True   
+        store=True,
+        copy=False
     )
+
+    
 
     
     pos_type_id = fields.Many2one(
@@ -82,13 +98,39 @@ class L10nBoPos(models.Model):
         comodel_name='l10n.bo.type.point.sale',
         copy=False
     )
+
+    
+    requested_cuis = fields.Boolean(
+        string='Cuis activo',
+        copy=False,
+        readonly=True,
+    )
+    
+    @api.constrains('cuis_id')
+    def _check_cuis_id(self):
+        for record in self:
+            record.requested_cuis = True if record.cuis_id else False
+    
+    
     
     
     # CUIS METHODS
-    def cuis_request(self):
-        if self.siat_connection():
+    def cuis_request(self, massive = False):
+        if not massive:
+            if self.siat_connection():
+                self.ensure_one()
+                _today_now = self.getDatetimeNow()
+                _update = False
+                if not self.cuis_id:
+                    _update = True
+                if self.cuis_id:
+                    if _today_now >= self.cuis_id.fechaVigencia:
+                        _update = True
+                if _update:
+                    self.process_siat('cuis')
+        else:
             self.ensure_one()
-            _today_now = datetime.now()
+            _today_now = self.getDatetimeNow()
             _update = False
             if not self.cuis_id:
                 _update = True
@@ -97,6 +139,7 @@ class L10nBoPos(models.Model):
                     _update = True
             if _update:
                 self.process_siat('cuis')
+        
 
     def process_siat(self, request):
         _wsdl, _delegate_token = self.branch_office_id.company_id.get_wsdl_obtaining_codes()
@@ -115,7 +158,7 @@ class L10nBoPos(models.Model):
             'codigoModalidad': int(self.branch_office_id.company_id.getL10nBoCodeModality()),
             'codigoPuntoVenta': int(self.code),
             'codigoSistema': self.branch_office_id.company_id.getL10nBoCodeSystem(),
-            'codigosucursal': self.branch_office_id.getCode(),
+            'codigoSucursal': self.branch_office_id.getCode(),
             'nit': self.branch_office_id.company_id.getNit()
         }
     
@@ -132,11 +175,17 @@ class L10nBoPos(models.Model):
     )
     
 
-    def cufd_request(self):
-        if self.siat_connection():
+    def cufd_request(self, massive = False):
+        if not massive:
+            if self.siat_connection():
+                if self.emision_id:
+                    if self.emision_id.getCode() == 1:
+                        self.process_siat('cufd')
+        else:
             if self.emision_id:
                 if self.emision_id.getCode() == 1:
                     self.process_siat('cufd')
+
     
     def _prepare_params_soap_cufd(self):
         request_data = self.get_default_params()
@@ -184,7 +233,7 @@ class L10nBoPos(models.Model):
                         self.cufd_id = self.env['l10n.bo.cufd'].create(_vals)
                     
                     _logger.info(f'{res_data.mensajesList}')
-                    self.cufd_id.setMessageList(res_data.mensajesList) if res_data.mensajesList else []
+                self.cufd_id.setMessageList(res_data.mensajesList) if res_data.mensajesList else []
 
         else:
             self.write({'error':response.get('error')})
@@ -232,19 +281,40 @@ class L10nBoPos(models.Model):
     # CREATE RECORDS
 
     
+    type_pos_id = fields.Many2one(
+        string='Tipo',
+        comodel_name='l10n.bo.type.point.sale'
+    )
+    
+    
+    transaccion = fields.Boolean(
+        string='Trassacción',
+        default=False
+    )
+    
 
     # OPEN POS
     def open_pos_request(self):
-        _wsdl, _delegate_token = self.branch_office_id.company_id.get_wsdl_operations()
-        _params = self.prepare_params_open_pos()
-        siat = SiatService(_wsdl, _delegate_token, _params, siatConstant.CREATE_POS)
-        response = siat.process_soap_siat()
-        raise UserError(f'{response}')
-        if response.get('success', False):
-            res_data = response.get('data', {})
-            if res_data.transaccion:
-                self.write({'code': res_data.codigoPuntoVenta, 'l10n_bo_is_sync': True})
-                self.button_process_siat()
+        if not self.existPos(self.code):
+            _wsdl, _delegate_token = self.branch_office_id.company_id.get_wsdl_operations()
+            _params = self.prepare_params_open_pos()
+            siat = SiatService(_wsdl, _delegate_token, _params, siatConstant.CREATE_POS)
+            response = siat.process_soap_siat()
+            if response.get('success', False):
+                res_data = response.get('data', {})
+                if res_data.transaccion:
+                    self.create({'code': res_data.codigoPuntoVenta, 'transaccion': res_data.transaccion})
+        else:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Respuesta',
+                    'message': 'El punto de venta que intenta crear ya existe en la base de datos del SIN',
+                    'sticky': False,
+                }
+            }
+                
         
     def prepare_params_open_pos(self):
         company = self.branch_office_id.company_id
@@ -253,13 +323,62 @@ class L10nBoPos(models.Model):
             'codigoModalidad': int(company.getL10nBoCodeModality()),
             'codigoSistema': company.getL10nBoCodeSystem(),
             'codigoSucursal': int(self.branch_office_id.code),
-            'codigoTipoPuntoVenta': int(self.l10n_bo_type_pos.sorter_code or '5'),
+            'codigoTipoPuntoVenta': int(self.type_pos_id.getCode() or '5'),
             'cuis': self.search([('code','=',0)],limit=1).getCuis(),
-            'descripcion': self.description or '',
+            'descripcion': self.address or '',
             'nit': company.getNit(),
             'nombrePuntoVenta': self.name or ''
         }
         return {'SolicitudRegistroPuntoVenta': request_data}
+    
+    def _prepare_params_delete(self):
+        company = self.branch_office_id.company_id
+        request_data = {
+            'codigoAmbiente': int(company.getL10nBoCodeEnvironment()),
+            'codigoPuntoVenta': self.code,
+            'codigoSistema': company.getL10nBoCodeSystem(),
+            'codigoSucursal': self.branch_office_id.code,
+            'cuis': self.search([('code','=',0)],limit=1).getCuis(),
+            'nit': company.getNit()
+        }
+        return {'SolicitudCierrePuntoVenta': request_data}
+    
+    def run_reponse(self, response):
+        if response.get('success'):
+            res_data = response.get('data', {})
+            if res_data.transaccion:
+                self.unlink()
+
+    def delete_to_siat(self):
+        _wsdl, _delegate_token = self.branch_office_id.company_id.get_wsdl_operations()
+        siat = SiatService(_wsdl, _delegate_token, self._prepare_params_delete(), siatConstant.DELETE_POS)
+        res = siat.process_soap_siat()
+        self.run_reponse(res)
+
+    def getAllPos(self):
+        poss = []
+        _wsdl, _delegate_token = self.company_id.get_wsdl_operations()
+        siat = SiatService(_wsdl, _delegate_token, self.branch_office_id._prepare_params_select_pos(), siatConstant.SELECT_POS)
+        res = siat.process_soap_siat()
+        if res.get('success', False):
+            res_data = res.get('data',{})
+            if res_data:
+                if res_data.transaccion:
+                    poss = res_data.listaPuntosVentas
+        return poss
+    
+    def existPos(self, code):
+        exist = False
+        poss = self.getAllPos()
+        if poss:
+            for pos in poss:
+                if code == pos.codigoPuntoVenta:
+                    exist = True
+                    break
+        return exist
+
+    
+    
 
 class l10nBoCuis(models.Model):
     _name = "l10n.bo.cuis"

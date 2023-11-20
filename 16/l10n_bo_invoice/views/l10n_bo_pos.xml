@@ -17,6 +17,11 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="cuis_id"/>
+                <field name="cufd_id"/>
+                <field name="pos_type_id"/>
+                
+                <field name="error"/>
             </tree>
         </field>
     </record>
@@ -41,7 +46,7 @@
                         <group>  
                             <field name="branch_office_id"/>
                             <field name="emision_id"/>
-                            
+                            <field name="pos_type_id"/>
                         </group>
                         <group>
                             <field name="cuis_id"/>
@@ -52,6 +57,10 @@
                         <group>
                             <field name="address"/>
                         </group>
+                        <group>
+                            <field name="error"  />
+                        </group>
+                        
                     </group>
                     
                 </sheet>

@@ -797,6 +797,9 @@ class TypePos(models.Model):
         for leg in self.search([]):
             leg._compute_name()
 
+    def getCode(self):
+        return self.codigoClasificador
+
     company_id = fields.Many2one(
         string='Company', 
         comodel_name='res.company', 

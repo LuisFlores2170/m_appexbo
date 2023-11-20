@@ -42,6 +42,34 @@ class L10nBoBranchOffice(models.Model):
         inverse_name='branch_office_id', 
         copy=False
     )
+
+    
+    quant_online = fields.Integer(
+        string='Cant. en linea',
+    )
+    quant_offline = fields.Integer(
+        string='Cant. fuera de linea',
+    )
+    
+    quant_inactive = fields.Integer(
+        string='Cant. inactiva',
+    )
+    
+    quant_pos = fields.Integer(
+        string='Cantidad de POS',
+    )
+    
+
+    
+    @api.constrains('l10n_bo_pos_ids')
+    def _check_l10n_bo_pos_ids(self):
+        for record in self:
+            record.quant_online = len( [ pos for pos in record.l10n_bo_pos_ids if pos.emision_id and pos.emision_id.getCode() == 1 ] )
+            record.quant_offline = len( [ pos for pos in record.l10n_bo_pos_ids if pos.emision_id and pos.emision_id.getCode() == 2 ] )
+            record.quant_inactive = len( [ pos for pos in record.l10n_bo_pos_ids if not pos.emision_id ] )
+            record.quant_pos = len(record.l10n_bo_pos_ids)
+            
+    
     
     def getCode(self):
         return self.code
@@ -58,10 +86,22 @@ class L10nBoBranchOffice(models.Model):
         return {'SolicitudConsultaPuntoVenta': request_data}
     
     def update_pos_from_siat(self):
-        _wsdl, _delegate_token = self.company_id.get_wsdl_operations()
-        siat = SiatService(_wsdl, _delegate_token, self._prepare_params_select_pos(), siatConstant.SELECT_POS)
-        res = siat.process_soap_siat()
-        self.createPosS(res)
+        pos = self.env['l10n.bo.pos'].search([('code','=',0)],limit=1)
+        if pos:
+            _wsdl, _delegate_token = self.company_id.get_wsdl_operations()
+            siat = SiatService(_wsdl, _delegate_token, self._prepare_params_select_pos(), siatConstant.SELECT_POS)
+            res = siat.process_soap_siat()
+            self.createPosS(res)
+        else:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Respuesta',
+                    'message': 'Debe registrar y obtener el cuis del Punto de venta 0, en primera instancia',
+                    'sticky': False,
+                }
+            }
 
     def createPosS(self, res):
         if res.get('success', False):
@@ -81,34 +121,32 @@ class L10nBoBranchOffice(models.Model):
                                     'branch_office_id' : self.id
                                 }
                             )
+                    self._check_l10n_bo_pos_ids()
                 else:
                     pass
 
-    def _prepare_params_cuisMasivo(self):
-        company = self.company_id
-        request_data = {
-            'codigoAmbiente': int(company.getL10nBoCodeEnvironment()),
-            'codigoModalidad': int(company.getL10nBoCodeModality()),
-            'codigoSistema': company.getL10nBoCodeSystem(),
-            'nit': company.getNit(),
-            'datosSolicitud' :{
-                    'codigoPuntoVenta':0
-            },
-            'codigoSucursal': int(0),
-            'codigoPuntoVenta' : 0
-            
-        }
-        return {'SolicitudCuisMasivoSistemas': request_data}
+    
     
     def cuis_massive_request(self):
-        _wsdl, _delegate_token = self.company_id.get_wsdl_obtaining_codes()
-        siat = SiatService(_wsdl, _delegate_token, getattr(self, f'_prepare_params_cuisMasivo')(), siatConstant.MASSIVE_CUIS)
-        res = siat.process_soap_siat()
-        raise UserError(f'{res}')
+        pos_id = self.env['l10n.bo.pos'].search([('code','=',0)],limit=1)
+        if pos_id:
+            if pos_id.siat_connection():
+                for pos in self.l10n_bo_pos_ids:
+                    if pos.siat_connection:
+                        pos.cuis_request(True)
+        else:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Respuesta',
+                    'message': 'Debe registrar y obtener el cuis del Punto de venta 0, en primera instancia',
+                    'sticky': False,
+                }
+            }
     
-    '''
-        {
-            'success': False, 
-            'error': TypeError("{https://siat.impuestos.gob.bo/}solicitudCuisMasivoSistemas() got an unexpected keyword argument 'codigoSucursal'. Signature: `codigoAmbiente: xsd:int, codigoModalidad: xsd:int, codigoSistema: xsd:string, datosSolicitud: {https://siat.impuestos.gob.bo/}solicitudListaCuisDto[], nit: xsd:long`")
-        }
-    '''
+    def cufd_massive_request(self):
+        if self.env['l10n.bo.pos'].search([('code','=',0)],limit=1).siat_connection():
+            for pos in self.l10n_bo_pos_ids:
+                if pos.siat_connection():
+                    pos.cufd_request(True)
